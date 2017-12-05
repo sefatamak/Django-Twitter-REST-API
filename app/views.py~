@@ -1,0 +1,96 @@
+from django.shortcuts import render,HttpResponse,HttpResponseRedirect
+from django.contrib.auth.forms import *
+from django.contrib.auth import *
+from django.contrib.auth.decorators import *
+from django.http import *
+
+from django.contrib.sessions.models import Session
+from django.contrib.auth.models import User
+#from django.contrib.sessions.models import sessionid
+import datetime
+from django.utils import timezone
+"""user = User.objects.create_user(username='sefa1234567',
+				 email='sefatamak@gmail.com',
+				 password='1234')
+user.save()
+u = User.objects.get(username='sefa1234')
+u.username = "tamak"
+u.save()"""
+
+
+"""def giris(request):
+	if request.method == 'POST':
+		if request.session.test_cookie_worked():
+			request.session.delete_test_cookie()
+			return HttpResponse("you are logged in")
+    	else:
+    		return HttpResponse("Please")
+   	request.session.set_test_cookie()
+   	return render(request,'giris.html',locals())
+
+
+
+
+	
+		
+	return render(request,'giris.html',locals())"""
+
+def giris(request):
+	oku = request.COOKIES
+	print "giris"
+	if('sessionid' in oku):
+		return render(request,'girdi.html',locals())
+	form = AuthenticationForm
+	if(request.method =='POST'):
+		print "girdi"
+		request.session['username'] = request.POST['username']
+		request.session['password'] = request.POST['password']
+		request.session['userr']=1
+		giris_kontrol = AuthenticationForm(data = request.POST)
+		if(giris_kontrol.is_valid()):
+			print "giris kontrol"
+			kullanici = authenticate(username = request.session['username'],password = request.session['password'])
+			login(request,kullanici)
+			return HttpResponseRedirect('bilgi/')
+	print "son"
+	return render(request,'giris.html',locals())
+
+
+try:
+    import json
+except ImportError:
+    import simplejson as json
+
+# Import the necessary methods from "twitter" library
+from twitter import Twitter, OAuth, TwitterHTTPError, TwitterStream
+
+# Variables that contains the user credentials to access Twitter API 
+ACCESS_TOKEN = '801028550400868352-B2454sUXyOS5cjkBMTTGLmOF1FJadaV'
+ACCESS_SECRET = '3Wj8DXRRjWuR3smgg7VUUJna04Zbxvjc5koXKH1A4XGXB'
+CONSUMER_KEY = 'w2Pi6M1zzs5TaQJrtgt9stbsF'
+CONSUMER_SECRET = '	SOBPc1aQtmE4lDuuKY5IdNRWYpVS2ZdWnxkAQ6bV1NRBecGty8'
+
+oauth = OAuth(ACCESS_TOKEN, ACCESS_SECRET, CONSUMER_KEY, CONSUMER_SECRET)
+
+
+
+def bilgi(url, key, secret, http_method="GET",post_body="", http_headers=None):
+    print "bilgiiiiiiiiiiiiiiiiiiiiii\n"
+    consumer = oauth2.Consumer(key=CONSUMER_KEY, secret=CONSUMER_SECRET)
+    token = oauth2.Token(key=key, secret=secret)
+    client = oauth2.Client(consumer, token)
+    resp, content = client.request( url, method=http_method, body=post_body, headers=http_headers )
+    print content
+    return HttpResponse("yaz")
+		
+	#if(not oku):
+	#	return HttpResponseRedirect('/')
+	#return render(request,'bilgi.html',locals())
+
+def cikis_yap(request):
+	oku = request.COOKIES
+	if('sessionid' not in oku):
+		return HttpResponseRedirect('/')
+	logout(request)
+	return HttpResponse('Cikis yapidi!,Lutfen Sayfayi Yenileyin!')
+# Create your views here.

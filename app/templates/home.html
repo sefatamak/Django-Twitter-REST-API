@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="tr-TR">
+<head>
+	<meta charset="UTF-8">
+	<title>Welcome!</title>
+</head>
+<body>
+<center>
+	<hr>
+		<p> Tweet List </p>
+			{% for field in tweet_list %}
+		<p> {{field.tweet}} </p>
+			{% endfor %}
+	<hr>
+</center>
+</body>
+</html>
+
